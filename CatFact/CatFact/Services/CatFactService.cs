@@ -1,5 +1,5 @@
-using System.Net.Http.Json;
 using CatFact.Models;
+using System.Net.Http.Json;
 
 namespace CatFact.Services;
 
@@ -12,12 +12,16 @@ public class CatFactService : ICatFactService {
 		_httpClient = httpClient;
 	}
 
-	public async Task<CatFactDTO> FetchFact() {
+	public async Task<CatFactDTO?> FetchFact() {
 		var result = await _httpClient.GetFromJsonAsync<CatFactDTO>("");
-		return result ?? throw new HttpRequestException("The API returned an empty response.");
+		return result;
 	}
 
 	public async Task WriteToFile(CatFactDTO fact) {
 		await File.AppendAllTextAsync(path, $"[{fact.Length}] {fact.Fact}{Environment.NewLine}");
+	}
+
+	public async Task<string[]> ReadFromFile(){
+		return await File.ReadAllLinesAsync(path);
 	}
 }
