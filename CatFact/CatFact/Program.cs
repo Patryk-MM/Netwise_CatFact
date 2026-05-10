@@ -6,7 +6,7 @@ IServiceCollection services = new ServiceCollection();
 
 services.AddScoped<MainMenu>();
 services.AddScoped<ICatFactService, CatFactService>();
-services.AddHttpClient<CatFactService>(client => {
+services.AddHttpClient<ICatFactService, CatFactService>(client => {
 	client.BaseAddress = new Uri(@"https://catfact.ninja/fact");
 });
 
