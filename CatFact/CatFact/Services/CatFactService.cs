@@ -3,17 +3,21 @@ using CatFact.Models;
 
 namespace CatFact.Services;
 
-public class CatFactService {
+public class CatFactService : ICatFactService {
 
 	private readonly HttpClient _httpClient;
+	private const string path = "CatFacts.txt";
 
 	public CatFactService(HttpClient httpClient) {
 		_httpClient = httpClient;
 	}
 
-
-	public async Task FetchFact() {
+	public async Task<CatFactDTO> FetchFact() {
 		var result = await _httpClient.GetFromJsonAsync<CatFactDTO>("");
-		Console.WriteLine(result?.Fact);
+		return result ?? throw new HttpRequestException("The API returned an empty response.");
+	}
+
+	public async Task WriteToFile(CatFactDTO fact) {
+		await File.AppendAllTextAsync(path, $"[{fact.Length}] {fact.Fact}{Environment.NewLine}");
 	}
 }

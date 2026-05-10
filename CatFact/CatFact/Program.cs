@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 IServiceCollection services = new ServiceCollection();
 
 services.AddScoped<MainMenu>();
-services.AddScoped<CatFactService>();
+services.AddScoped<ICatFactService, CatFactService>();
 services.AddHttpClient<CatFactService>(client => {
 	client.BaseAddress = new Uri(@"https://catfact.ninja/fact");
 });

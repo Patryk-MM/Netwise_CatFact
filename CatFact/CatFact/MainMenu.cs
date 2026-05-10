@@ -3,15 +3,20 @@ using CatFact.Services;
 namespace CatFact;
 
 public class MainMenu {
-	private readonly CatFactService _service;
+	private readonly ICatFactService _service;
 
-	public MainMenu(CatFactService service) {
+	public MainMenu(ICatFactService service) {
 		_service = service;
 	}
 
 
 	public async Task RunAsync() {
-		await _service.FetchFact();
-		await Task.Delay(1500);
+		try {
+			var fact = await _service.FetchFact();
+			await _service.WriteToFile(fact);
+		}
+		catch (Exception ex) {
+			Console.WriteLine(ex.Message);
+		}
 	}
 }
